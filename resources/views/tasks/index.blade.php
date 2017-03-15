@@ -8,8 +8,14 @@
         @foreach($tasks as $task)
 
             <li class="list-group-item">
+                <a href="{{ $task->user->name }}/tasks">
+                    {{ $task->user->name }}
+                </a>
+
+                --
+
                 <a href="tasks/{{ $task->id }}">
-                {{ $task->title }}
+                    {{ $task->title }}
                 </a>
             </li>
 
