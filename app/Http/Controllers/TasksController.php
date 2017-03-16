@@ -41,4 +41,12 @@ class TasksController extends Controller
 
         return redirect()->back();
     }
+
+    public function update(Task $task)
+    {
+        $task->completed = request('completed') ?: 0;
+        $task->save();
+
+        return redirect()->back();
+    }
 }

@@ -23,7 +23,9 @@
                     {{ csrf_field() }}
 
 
-                    <input type="checkbox" name="completed" value="1"> completed
+                    <input type="checkbox" name="completed" value="1"
+                    {{ $task->completed ? 'checked' : '' }}
+                    > completed
 
                     <button type="submit">submit</button>
 
