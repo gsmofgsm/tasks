@@ -16,6 +16,9 @@ Auth::routes();
 Route::get('/', 'TasksController@index')->name('home');
 Route::get('/tasks', 'TasksController@index');
 Route::get('/tasks/{task}', 'TasksController@show');
+Route::patch('/tasks/{task}', 'TasksController@update');
+
+Route::post('/tasks', 'TasksController@store');
 
 Route::get('{username}/tasks', 'UserTasksController@index');
 Route::get('{username}/tasks/{task}', 'UserTasksController@show');
