@@ -47,6 +47,6 @@ class TasksController extends Controller
         $task->completed = request('completed') ?: 0;
         $task->save();
 
-        return redirect()->back();
+        return 'The task is marked as ' . ( $task->completed ? 'completed' : 'uncompleted' );
     }
 }

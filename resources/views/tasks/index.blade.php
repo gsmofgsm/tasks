@@ -7,7 +7,7 @@
 
         <ul class="list-group">
 
-            <task v-for="task in tasks" :key="task.id" :task="task" v-if="! task.completed"></task>
+            <task v-for="task in tasks" :key="task.id" :task="task"></task>
 
         </ul>
 
@@ -26,6 +26,7 @@
 @section('footerscript')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         Vue.component('task', {
             props: [
@@ -36,7 +37,7 @@
             <li class="list-group-item">
                 <a :href="usertaskurl">@{{ task.user.name }}</a>
                 <a :href="taskurl">@{{ task.title }}</a>
-                <input type="checkbox" v-model="task.completed">
+                <input type="checkbox" v-model="task.completed" @click="updateTask">
             </li>`,
 
             computed: {
@@ -46,6 +47,17 @@
 
                 taskurl() {
                     return '/tasks/' + this.task.id;
+                }
+            },
+
+            methods: {
+                updateTask() {
+                    axios.patch(
+                        this.taskurl,
+                        {completed: this.task.completed}
+                    ).then(function(response){
+                        console.log('saved successfully! ' + response.data)
+                    });
                 }
             }
         })
