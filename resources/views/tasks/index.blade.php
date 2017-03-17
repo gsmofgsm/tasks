@@ -1,40 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Tasks</h1>
 
-    <ul class="list-group">
+    <div id="root">
+        <h1>Tasks</h1>
 
-        @foreach($tasks as $task)
+        <ul class="list-group">
 
-            <li class="list-group-item">
-                <a href="{{ $task->user->name }}/tasks">
-                    {{ $task->user->name }}
-                </a>
+            <task v-for="task in tasks" :key="task.id" :task="task" v-if="! task.completed"></task>
 
-                --
+        </ul>
 
-                <a href="tasks/{{ $task->id }}">
-                    {{ $task->title }}
-                </a>
-
-                <form action="tasks/{{$task->id}}" method="POST">
-                    <input type="hidden" name="_method" value="PATCH"/>
-                    {{ csrf_field() }}
-
-
-                    <input type="checkbox" name="completed" value="1"
-                    {{ $task->completed ? 'checked' : '' }}
-                    > completed
-
-                    <button type="submit">submit</button>
-
-                </form>
-            </li>
-
-        @endforeach
-
-    </ul>
+    </div>
 
     @if( isset($users) )
         <hr>
@@ -44,4 +21,43 @@
         @include('tasks.form')
 
     @endif
+@endsection
+
+@section('footerscript')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>
+    <script>
+        Vue.component('task', {
+            props: [
+                'task'
+            ],
+
+            template: `
+            <li class="list-group-item">
+                <a :href="usertaskurl">@{{ task.user.name }}</a>
+                <a :href="taskurl">@{{ task.title }}</a>
+                <input type="checkbox" v-model="task.completed">
+            </li>`,
+
+            computed: {
+                usertaskurl() {
+                    return '/' + this.task.user.name + '/tasks';
+                },
+
+                taskurl() {
+                    return '/tasks/' + this.task.id;
+                }
+            }
+        })
+
+        new Vue({
+            el: '#app',
+            data: {
+                tasks: {!! $tasks !!}
+            }
+        })
+
+    </script>
+
+
 @endsection

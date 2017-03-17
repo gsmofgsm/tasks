@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Task;
 use App\User;
 use Illuminate\Http\Request;
 
-class UserTasksController extends Controller
-{
-    public function index($username)
-    {
-        $user = User::whereName($username)->first();
+class UserTasksController extends Controller {
+   public function index( $username ) {
 
-        $tasks = $user->tasks;
+      $tasks = Task::with( [
+         'user' => function ($query) use ($username) {
+            $query->where( 'name', $username );
+         }
+      ] )->get();
 
-        return view('tasks.index', compact('tasks'));
-    }
+      return view( 'tasks.index', compact( 'tasks' ) );
+   }
 
-    public function show($username, $task)
-    {
-        $user = User::whereName($username)->first();
-        $task = $user->tasks()->findOrFail($task);
+   public function show( $username, $task ) {
+      $user = User::whereName( $username )->first();
+      $task = $user->tasks()->findOrFail( $task );
 
-        return view('tasks.show', compact('task'));
-    }
+      return view( 'tasks.show', compact( 'task' ) );
+   }
 }
